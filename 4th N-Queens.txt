@@ -1,0 +1,37 @@
+def is_safe(board, row, col):
+    for r in range(row):
+        if board[r] == col:
+            return False
+        if abs(board[r] - col) == abs(r - row):
+            return False
+    return True
+
+def solve(board, row, n, sols):
+    if row == n:
+        sols.append(board[:])
+        return
+    for col in range(n):
+        if is_safe(board, row, col):
+            board[row] = col
+            solve(board, row + 1, n, sols)
+            board[row] = -1
+
+n = 4
+sols = []
+solve([-1] * n, 0, n, sols)
+print("Total solutions:", len(sols))
+for s in sols[:2]:
+    print(s)
+
+
+
+
+"""N-Queens Algorithm:
+1. Start with empty board, place queen row by row
+2. For each row, try every column
+3. Check if placing queen is safe:
+   - No queen in same column
+   - No queen on same diagonal
+4. If safe, place queen and move to next row
+5. If not safe, try next column (backtrack)
+6. If all rows filled, store solution
