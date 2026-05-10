@@ -1,0 +1,85 @@
+import heapq
+
+goal = ((1,2,3),(4,5,6),(7,8,0))
+
+def heuristic(state):
+    return sum(
+        state[i][j] != 0 and state[i][j] != goal[i][j]
+        for i in range(3) for j in range(3)
+    )
+
+def get_neighbors(state):
+    neighbors = []
+    # find blank tile
+    for i in range(3):
+        for j in range(3):
+            if state[i][j] == 0:
+                bi, bj = i, j
+
+    moves = {
+        "UP": (-1, 0),
+        "DOWN": (1, 0),
+        "LEFT": (0, -1),
+        "RIGHT": (0, 1)
+    }
+
+    for name, (dr, dc) in moves.items():
+        ni, nj = bi + dr, bj + dc
+        if 0 <= ni < 3 and 0 <= nj < 3:
+            s = [list(r) for r in state]
+            s[bi][bj], s[ni][nj] = s[ni][nj], s[bi][bj]
+            neighbors.append((tuple(tuple(r) for r in s), name))
+    return neighbors
+
+def a_star(start):
+    start = tuple(tuple(r) for r in start)
+    pq = [(heuristic(start), 0, start, None, None)]
+    visited = {}
+
+    while pq:
+        f, g, cur, parent, move = heapq.heappop(pq)
+
+        if cur in visited:
+            continue
+
+        visited[cur] = (parent, move)
+
+        if cur == goal:
+            print("Solved in", g, "moves!\n")
+            print_moves_and_final_state(visited, cur)
+            return
+
+        for nb, mv in get_neighbors(cur):
+            if nb not in visited:
+                heapq.heappush(pq, (g+1+heuristic(nb), g+1, nb, cur, mv))
+
+def print_moves_and_final_state(visited, end_state):
+    moves = []
+    cur = end_state
+
+    while True:
+        parent, mv = visited[cur]
+        moves.append(mv)
+        if parent is None:
+            break
+        cur = parent
+
+    moves.reverse()
+    moves = moves[1:]   # skip first None
+
+    print("Moves:")
+    for m in moves:
+        print(m)
+
+    print("\nFinal Solved Matrix:")
+    for row in goal:
+        print(row)
+
+# -------- RUN --------
+start = [
+    [1, 2, 3],
+    [0, 4, 6],
+    [7, 5, 8]
+]
+
+a_star(start)
