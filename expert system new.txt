@@ -1,0 +1,30 @@
+print("===== Hospital Expert System =====")
+print("Answer the following questions with yes or no")
+
+fever = input("Do you have Fever? ").strip()
+cough = input("Do you have Cough? ").strip()
+headache = input("Do you have Headache? ").strip()
+bodyPain = input("Do you have Body Pain? ").strip()
+vomiting = input("Do you have Vomiting? ").strip()
+
+print("\n----- Diagnosis Result -----")
+
+if fever.lower() == "yes" and cough.lower() == "yes":
+    print("Possible Disease: Flu")
+    print("Advice: Take rest and drink warm fluids.")
+
+elif fever.lower() == "yes" and headache.lower() == "yes" and bodyPain.lower() == "yes":
+    print("Possible Disease: Dengue")
+    print("Advice: Consult a doctor and take a blood test.")
+
+elif vomiting.lower() == "yes" and headache.lower() == "yes":
+    print("Possible Disease: Food Poisoning")
+    print("Advice: Drink clean water and consult a doctor.")
+
+elif cough.lower() == "yes" and headache.lower() == "yes":
+    print("Possible Disease: Common Cold")
+    print("Advice: Take proper rest and warm liquids.")
+
+else:
+    print("Disease not identified.")
+    print("Please consult a doctor for accurate diagnosis.")
